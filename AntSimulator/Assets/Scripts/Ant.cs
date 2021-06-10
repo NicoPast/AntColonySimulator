@@ -22,6 +22,7 @@ public class Ant : MonoBehaviour
     Vector2 pos;
     
     public LayerMask foodLayer;
+    public LayerMask floorLayer;
     Transform targFood;
     public float viewRadius;
     public float viewAngle;
@@ -35,6 +36,16 @@ public class Ant : MonoBehaviour
     public GameObject pheromone;
     public Transform pheromonePool;
 
+    public Transform antHill;
+
+    bool frontTick = true;
+
+    public float collisionAngle;
+    public float warningRadius;
+    public float dangerRadius;
+    public float warningRotStr;
+    public float dangerRotStr;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,9 +56,9 @@ public class Ant : MonoBehaviour
     void Update()
     {
         Vector3 pointTo = transform.position + ((Quaternion.Euler(0, 0, -viewAngle/2) * transform.right).normalized * viewRadius);
-        Debug.DrawLine(transform.position, pointTo, Color.black);
+        //Debug.DrawLine(transform.position, pointTo, Color.black);
         pointTo = transform.position + ((Quaternion.Euler(0, 0, viewAngle / 2) * transform.right).normalized * viewRadius);
-        Debug.DrawLine(transform.position, pointTo, Color.black);
+        //Debug.DrawLine(transform.position, pointTo, Color.black);
         //Debug.DrawLine(transform.position, (transform.position + transform.forward).normalized * viewRadius, Color.green);
         //Debug.DrawLine(transform.position, (transform.position + transform.up).normalized * viewRadius, Color.red);
         //rotated = Quaternion.AngleAxis(viewAngle, transform.forward) * (transform.position + transform.right).normalized;
@@ -59,6 +70,8 @@ public class Ant : MonoBehaviour
         //target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //dir = ((Vector2)target - pos).normalized;
         SetDirection();
+
+        checkCollision();
 
         Vector2 vel2 = dir * maxSpeed;
         Vector2 rot = (vel2 - vel) * rotSpeed;
@@ -75,7 +88,27 @@ public class Ant : MonoBehaviour
 
     void SetDirection()
     {
+        if(state == AntState.Idle)
+        {
+            IdleDir();
+        }
+        else
+        {
+            dir = (dir + ((Vector2)antHill.position - pos)).normalized;
+
+            const float foodDropRadius = 0.5f;
+            if (Vector2.Distance(antHill.position, transform.position) < foodDropRadius)
+            {
+                // cambiar el estado de la hormiga
+                state = AntState.Idle;
+            }
+        }
+    }
+
+    void IdleDir()
+    {
         dir = (dir + Random.insideUnitCircle * wanderStr).normalized;
+
         if (!targFood)
         {
             Collider2D[] vision = Physics2D.OverlapCircleAll(pos, viewRadius, foodLayer);
@@ -106,7 +139,7 @@ public class Ant : MonoBehaviour
             dir = (targFood.position - transform.position).normalized;
 
             const float foodPickUpRadius = 0.5f;
-            if(Vector2.Distance(targFood.position, transform.position) < foodPickUpRadius)
+            if (Vector2.Distance(targFood.position, transform.position) < foodPickUpRadius)
             {
                 // cambiar el estado de la hormiga
                 Destroy(targFood.gameObject);
@@ -123,7 +156,99 @@ public class Ant : MonoBehaviour
         {
             timer = 0;
             GameObject ph = Instantiate(pheromone, transform.position, transform.rotation, pheromonePool);
-            ph.GetComponent<Pheromone>().activatePheromone(Pheromone.PheromoneType.Home, pheromoneStr);
+            Pheromone.PheromoneType t = (state == AntState.Idle) ? Pheromone.PheromoneType.Home : Pheromone.PheromoneType.Food;
+            ph.GetComponent<Pheromone>().activatePheromone(t, pheromoneStr);
         }
+    }
+
+    void checkCollision()
+    {
+        RaycastHit rF, rL, rR;
+        Physics.Raycast(transform.position, transform.right, out rF);
+        Vector3 dL = (Quaternion.Euler(0, 0, -collisionAngle / 2) * transform.right).normalized;
+        Physics.Raycast(transform.position, dL, out rL);
+        Vector3 dR = (Quaternion.Euler(0, 0, collisionAngle / 2) * transform.right).normalized;
+        Physics.Raycast(transform.position, dR, out rR);
+
+        pintarRayo(rF);
+        dir += (Vector2)calcularFrontal(rF, rR, rL);
+
+        pintarRayo(rR);
+        pintarRayo(rL);
+        dir += (Vector2)calcularLaterales(rR, rL);
+    }
+
+    Vector3 calcularFrontal(RaycastHit front, RaycastHit derecha, RaycastHit izquierda)
+    {
+        Vector3 d = Vector3.zero;
+        if (front.collider)
+        {
+            //si vamos a colisionar con un obstaculo
+            //marcamos que hay peligro frontal para no tratar los posibles peligros laterales
+            if (!frontTick)
+                frontTick = true;
+
+            //tratamos la direccion en la que debe avanzar el agente para evitar la colision frontal
+            d = (Quaternion.Euler(0,0,collisionAngle) * (derecha.point - transform.position)).normalized;
+            if (derecha.distance < izquierda.distance)
+            {
+                d = Quaternion.Euler(0, 0, 180) * d;
+            }
+            else if (Mathf.Abs(derecha.distance - izquierda.distance) < 0.1)
+                d = Vector3.zero;
+            d -= (front.point - transform.position).normalized;
+            if (front.distance > warningRadius)
+                d *= 0;
+            else if (front.distance < warningRadius && front.distance > dangerRadius)
+                d *= warningRotStr;
+            else if (front.distance < dangerRadius)
+                d *= dangerRotStr;
+
+        }
+        return d;
+    }
+
+    Vector3 calcularLaterales(RaycastHit derecha, RaycastHit izquierda)
+    {
+        RaycastHit rMax;
+        Vector3 d = Vector3.zero;
+
+        //si hay peligro de colision frontal, decidimos evitar los peligros a los laterales
+        //tratamos la direccion en la que debe avanzar el agente para evitar las colisiones
+        if (!frontTick)
+        {
+            d = (Quaternion.Euler(0, 0, collisionAngle) * (derecha.point - transform.position)).normalized;
+            if (derecha.distance < izquierda.distance)
+            {
+                rMax = derecha;
+                d = Quaternion.Euler(0, 0, 180) * d;
+            }
+            else
+            {
+                rMax = izquierda;
+            }
+
+            if (rMax.distance > warningRadius)
+                return Vector3.zero;
+            if (rMax.distance < warningRadius && rMax.distance > dangerRadius)
+            {
+                d *= warningRotStr;
+            }
+            else if (rMax.distance < dangerRadius)
+            {
+                d *= dangerRotStr;   // Reza a la Virgen
+            }
+        }
+        return d;
+    }
+
+    void pintarRayo(RaycastHit r)
+    {
+        float distanciaSeg = r.distance < warningRadius ? r.distance : warningRadius;
+        float distanciaPan = r.distance < dangerRadius ? r.distance : dangerRadius;
+
+        Debug.DrawRay(transform.position, r.point - transform.position, Color.blue);
+        Debug.DrawRay(transform.position, (r.point - transform.position).normalized * distanciaSeg, Color.yellow);
+        Debug.DrawRay(transform.position, (r.point - transform.position).normalized * distanciaPan, Color.red);
     }
 }

@@ -119,12 +119,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 228ce2bd50228904397cbee7beea3479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 6
+  maxSpeed: 4
   rotSpeed: 1
   wanderStr: 0.3
   foodLayer:
     serializedVersion: 2
     m_Bits: 256
+  floorLayer:
+    serializedVersion: 2
+    m_Bits: 0
   viewRadius: 10
   viewAngle: 70
   pheromoneSpawnRate: 0.5
@@ -132,3 +135,9 @@ MonoBehaviour:
   pheromone: {fileID: 5331745331491770734, guid: e4fa6c5033eddd240b75cd4d1c16e4b0,
     type: 3}
   pheromonePool: {fileID: 0}
+  antHill: {fileID: 0}
+  collisionAngle: 60
+  warningRadius: 10
+  dangerRadius: 5
+  warningRotStr: 5
+  dangerRotStr: 40

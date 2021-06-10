@@ -59,5 +59,9 @@ public class Pheromone : MonoBehaviour
         {
             c = Color.gray;
         }
+        else
+        {
+            c = Color.blue;
+        }
     }
 }
