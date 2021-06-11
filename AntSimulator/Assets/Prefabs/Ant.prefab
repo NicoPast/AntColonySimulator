@@ -125,9 +125,6 @@ MonoBehaviour:
   foodLayer:
     serializedVersion: 2
     m_Bits: 256
-  floorLayer:
-    serializedVersion: 2
-    m_Bits: 0
   viewRadius: 10
   viewAngle: 70
   pheromoneSpawnRate: 0.5
@@ -136,6 +133,7 @@ MonoBehaviour:
     type: 3}
   pheromonePool: {fileID: 0}
   antHill: {fileID: 0}
+  antHillTr: {fileID: 0}
   collisionAngle: 60
   warningRadius: 10
   dangerRadius: 5

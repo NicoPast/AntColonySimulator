@@ -22,7 +22,6 @@ public class Ant : MonoBehaviour
     Vector2 pos;
     
     public LayerMask foodLayer;
-    public LayerMask floorLayer;
     Transform targFood;
     public float viewRadius;
     public float viewAngle;
@@ -36,7 +35,9 @@ public class Ant : MonoBehaviour
     public GameObject pheromone;
     public Transform pheromonePool;
 
-    public Transform antHill;
+    public AntHill antHill;
+
+    public Transform antHillTr;
 
     bool frontTick = true;
 
@@ -56,9 +57,9 @@ public class Ant : MonoBehaviour
     void Update()
     {
         Vector3 pointTo = transform.position + ((Quaternion.Euler(0, 0, -viewAngle/2) * transform.right).normalized * viewRadius);
-        //Debug.DrawLine(transform.position, pointTo, Color.black);
+        Debug.DrawLine(transform.position, pointTo, Color.black);
         pointTo = transform.position + ((Quaternion.Euler(0, 0, viewAngle / 2) * transform.right).normalized * viewRadius);
-        //Debug.DrawLine(transform.position, pointTo, Color.black);
+        Debug.DrawLine(transform.position, pointTo, Color.black);
         //Debug.DrawLine(transform.position, (transform.position + transform.forward).normalized * viewRadius, Color.green);
         //Debug.DrawLine(transform.position, (transform.position + transform.up).normalized * viewRadius, Color.red);
         //rotated = Quaternion.AngleAxis(viewAngle, transform.forward) * (transform.position + transform.right).normalized;
@@ -94,13 +95,14 @@ public class Ant : MonoBehaviour
         }
         else
         {
-            dir = (dir + ((Vector2)antHill.position - pos)).normalized;
+            dir = (dir + ((Vector2)antHillTr.position - pos)).normalized;
 
             const float foodDropRadius = 0.5f;
-            if (Vector2.Distance(antHill.position, transform.position) < foodDropRadius)
+            if (Vector2.Distance(antHillTr.position, transform.position) < foodDropRadius)
             {
                 // cambiar el estado de la hormiga
                 state = AntState.Idle;
+                antHill.addFood(1);
             }
         }
     }
@@ -250,5 +252,12 @@ public class Ant : MonoBehaviour
         Debug.DrawRay(transform.position, r.point - transform.position, Color.blue);
         Debug.DrawRay(transform.position, (r.point - transform.position).normalized * distanciaSeg, Color.yellow);
         Debug.DrawRay(transform.position, (r.point - transform.position).normalized * distanciaPan, Color.red);
+    }
+
+    public void setUpAnt(Transform phPool, Transform antHTr, AntHill antH)
+    {
+        pheromonePool = phPool;
+        antHillTr = antHTr;
+        antHill = antH;
     }
 }
