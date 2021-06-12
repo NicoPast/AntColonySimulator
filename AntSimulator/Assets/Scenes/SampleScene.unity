@@ -1453,7 +1453,7 @@ Transform:
   m_GameObject: {fileID: 183215887}
   m_LocalRotation: {x: -0, y: -0, z: -0.40296602, w: 0.915215}
   m_LocalPosition: {x: 11.06, y: 1.31, z: 0}
-  m_LocalScale: {x: 18.7218, y: 1, z: 1}
+  m_LocalScale: {x: 14.0709305, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 864238828}
   m_RootOrder: 4
@@ -8930,11 +8930,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6256344404727856938, guid: 4cabf31f31e154c4aa23f550d747cede,
-        type: 3}
-      propertyPath: food
-      value: 200
-      objectReference: {fileID: 0}
     - target: {fileID: 6256344404727856938, guid: 4cabf31f31e154c4aa23f550d747cede,
         type: 3}
       propertyPath: antsPool

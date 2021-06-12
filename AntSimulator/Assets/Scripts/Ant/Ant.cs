@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ant : MonoBehaviour
 {
-    enum AntState
+    public enum AntState
     {
         Idle = 0,
         WithFood,
@@ -26,8 +26,9 @@ public class Ant : MonoBehaviour
     Vector2 pos;
     
     Transform targFood;
+    bool withFood = false;
 
-    AntState state = AntState.Idle;
+    public AntState state = AntState.Idle;
 
     public AntHill antHill;
 
@@ -37,7 +38,19 @@ public class Ant : MonoBehaviour
     public GetFood getFood;
     public HandlePheromones handlePheromones;
 
-    bool turningAround = false;
+    public bool turningAround = false;
+
+    Vector2 lastPosA;
+    Vector2 lastPosB;
+    float timerLP;
+    bool skipLastP = true;
+    public float lastPosDist;
+    public float timeToUpdateLastPos;
+
+    float timerDan;
+    public float timeToBeInDanger;
+
+    const float foodDropRadius = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +64,22 @@ public class Ant : MonoBehaviour
     {
         //target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //dir = ((Vector2)target - pos).normalized;
+
+        // para evitar remolinos
+        if (state == AntState.Danger)
+            timerDan += Time.deltaTime;
+        timerLP += Time.deltaTime;
+        if(timerLP > timeToUpdateLastPos)
+        {
+            timerLP = 0;
+            lastPosB = lastPosA;
+            lastPosA = transform.position;
+            if (!skipLastP && Vector2.Distance(transform.position, lastPosB) < lastPosDist)
+            {
+                changeState(AntState.Danger);
+            }
+            skipLastP = false;
+        }
         if (turningAround)
         {
             dir = transform.right * -10;
@@ -89,13 +118,30 @@ public class Ant : MonoBehaviour
             if (Vector2.Distance(transform.position, antHillTr.position) < viewRadius && Vector2.Angle(transform.right, antHillTr.position - transform.position) < viewAngle / 2)
                 dir = ((Vector2)antHillTr.position - pos).normalized;
 
+            if(timerDan > timeToBeInDanger)
+            {
+                timerDan = 0;
+                if (withFood)
+                    changeState(AntState.WithFood);
+                else changeState(AntState.Idle);
+            }
 
-            const float foodDropRadius = 0.5f;
             if (Vector2.Distance(antHillTr.position, transform.position) < foodDropRadius)
             {
                 // cambiar el estado de la hormiga
-                changeState(AntState.Idle);
-                antHill.addFood(1);
+                if (state == AntState.WithFood)
+                {
+                    changeState(AntState.Idle);
+                    antHill.addFood(1);
+                    withFood = false;
+                }
+                else
+                {
+                    // cambiar el estado de la hormiga
+                    if (withFood)
+                        changeState(AntState.WithFood);
+                    else changeState(AntState.Idle);
+                }
             }
         }
 
@@ -124,6 +170,7 @@ public class Ant : MonoBehaviour
                 // cambiar el estado de la hormiga
                 Destroy(targFood.gameObject);
                 changeState(AntState.WithFood);
+                withFood = true;
                 targFood = null;
             }
         }
@@ -148,6 +195,7 @@ public class Ant : MonoBehaviour
             break;
         }
         turningAround = true;
+        skipLastP = true;
     }
 
     public void setUpAnt(Transform phPool, Transform antHTr, AntHill antH)
