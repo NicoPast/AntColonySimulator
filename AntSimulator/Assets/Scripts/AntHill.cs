@@ -7,7 +7,7 @@ public class AntHill : MonoBehaviour
     public float food = 0;
 
     public float antCost = 0;
-    uint numOfAnts;
+    public uint numOfAnts;
 
     public float spawnRadius = 0;
 
@@ -49,6 +49,7 @@ public class AntHill : MonoBehaviour
             Vector3 pos = transform.position + (Vector3)Random.insideUnitCircle * Random.Range(0, spawnRadius);
             GameObject ant = Instantiate(antPref, pos, Random.rotation, antsPool);
             ant.GetComponent<Ant>().setUpAnt(pheromonePool, transform, this);
+            numOfAnts++;
         }
     }
 

@@ -6,14 +6,14 @@ public class Pheromone : MonoBehaviour
 {
     public enum PheromoneType
     {
-        Home = 0,
+        Idle = 0,
         Food,
         Danger
     };
 
     bool active = false;
 
-    PheromoneType type = PheromoneType.Home;
+    PheromoneType type = PheromoneType.Idle;
     public float strength = 0;
 
     public LayerMask idleLM;
@@ -40,7 +40,7 @@ public class Pheromone : MonoBehaviour
 
     void normalizeLayerMask(ref LayerMask l)
     {
-        int layerNumber = 0;
+        int layerNumber = -1;
         int layer = l.value;
         while (layer > 0)
         {
@@ -69,28 +69,26 @@ public class Pheromone : MonoBehaviour
     public void activatePheromone(PheromoneType t, float str = 10)
     {
         type = t;
+        Debug.Log(type);
         creationTime = Time.time;
         strength = str;
         maxStr = str;
         active = true;
-        if (type == PheromoneType.Home)
+        if (type == PheromoneType.Idle)
         {
             normalizeLayerMask(ref idleLM);
-            Debug.Log(idleLM.value);
             gameObject.layer = idleLM.value;
             c = Color.gray;
         }
         else if(type == PheromoneType.Food)
         {
             normalizeLayerMask(ref foodLM);
-            Debug.Log(foodLM.value);
             gameObject.layer = foodLM.value;
             c = Color.blue;
         }
         else
         {
             normalizeLayerMask(ref dangerLM);
-            Debug.Log(dangerLM.value);
             gameObject.layer = dangerLM.value;
             c = Color.red;
         }
