@@ -14,9 +14,9 @@ TagManager:
   - 
   - 
   - Food
-  - 
-  - 
-  - 
+  - IdlePheromone
+  - FoodPheromone
+  - DangerPheromone
   - 
   - 
   - 

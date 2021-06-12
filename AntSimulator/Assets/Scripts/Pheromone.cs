@@ -7,13 +7,19 @@ public class Pheromone : MonoBehaviour
     public enum PheromoneType
     {
         Home = 0,
-        Food
+        Food,
+        Danger
     };
 
     bool active = false;
 
     PheromoneType type = PheromoneType.Home;
     public float strength = 0;
+
+    public LayerMask idleLM;
+    public LayerMask foodLM;
+    public LayerMask dangerLM;
+
     float maxStr;
     float creationTime = 0;
 
@@ -32,6 +38,18 @@ public class Pheromone : MonoBehaviour
         render = transform.gameObject.GetComponent<MeshRenderer>();
     }
 
+    void normalizeLayerMask(ref LayerMask l)
+    {
+        int layerNumber = 0;
+        int layer = l.value;
+        while (layer > 0)
+        {
+            layer = layer >> 1;
+            layerNumber++;
+        }
+        l.value = layerNumber;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -48,7 +66,7 @@ public class Pheromone : MonoBehaviour
         }
     }
 
-    public void activatePheromone(PheromoneType t, float str = 1)
+    public void activatePheromone(PheromoneType t, float str = 10)
     {
         type = t;
         creationTime = Time.time;
@@ -57,11 +75,29 @@ public class Pheromone : MonoBehaviour
         active = true;
         if (type == PheromoneType.Home)
         {
+            normalizeLayerMask(ref idleLM);
+            Debug.Log(idleLM.value);
+            gameObject.layer = idleLM.value;
             c = Color.gray;
+        }
+        else if(type == PheromoneType.Food)
+        {
+            normalizeLayerMask(ref foodLM);
+            Debug.Log(foodLM.value);
+            gameObject.layer = foodLM.value;
+            c = Color.blue;
         }
         else
         {
-            c = Color.blue;
+            normalizeLayerMask(ref dangerLM);
+            Debug.Log(dangerLM.value);
+            gameObject.layer = dangerLM.value;
+            c = Color.red;
         }
+    }
+
+    public float getStrength()
+    {
+        return strength;
     }
 }

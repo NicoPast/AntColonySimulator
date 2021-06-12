@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5331745331491770731}
   - component: {fileID: -322580026513981771}
   - component: {fileID: 5331745331491770741}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Pheromone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,4 +119,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d98fb7bb4aeb3449e10535c0ed5dcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 0
+  strength: 10
+  idleLM:
+    serializedVersion: 2
+    m_Bits: 512
+  foodLM:
+    serializedVersion: 2
+    m_Bits: 1024
+  dangerLM:
+    serializedVersion: 2
+    m_Bits: 2048

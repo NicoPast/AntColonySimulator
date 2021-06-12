@@ -35,17 +35,18 @@ public class Ant : MonoBehaviour
     public GameObject pheromone;
     public Transform pheromonePool;
 
+    public Sensor frontSensor;
+    public Sensor leftSensor;
+    public Sensor rightSensor;
+
     public AntHill antHill;
 
     public Transform antHillTr;
 
-    bool frontTick = true;
+    public Vector2 leftForcePhSensor;
+    public Vector2 rightForcePhSensor;
 
-    public float collisionAngle;
-    public float warningRadius;
-    public float dangerRadius;
-    public float warningRotStr;
-    public float dangerRotStr;
+    public CollisionDetector cD;
 
     // Start is called before the first frame update
     void Start()
@@ -72,7 +73,9 @@ public class Ant : MonoBehaviour
         //dir = ((Vector2)target - pos).normalized;
         SetDirection();
 
-        checkCollision();
+        dir += cD.checkCollision();
+
+        detectPheromones();
 
         Vector2 vel2 = dir * maxSpeed;
         Vector2 rot = (vel2 - vel) * rotSpeed;
@@ -159,99 +162,37 @@ public class Ant : MonoBehaviour
             timer = 0;
             GameObject ph = Instantiate(pheromone, transform.position, transform.rotation, pheromonePool);
             Pheromone.PheromoneType t = (state == AntState.Idle) ? Pheromone.PheromoneType.Home : Pheromone.PheromoneType.Food;
+            //Pheromone.PheromoneType t = Pheromone.PheromoneType.Danger;
             ph.GetComponent<Pheromone>().activatePheromone(t, pheromoneStr);
         }
     }
 
-    void checkCollision()
+    void detectPheromones()
     {
-        RaycastHit rF, rL, rR;
-        Physics.Raycast(transform.position, transform.right, out rF);
-        Vector3 dL = (Quaternion.Euler(0, 0, -collisionAngle / 2) * transform.right).normalized;
-        Physics.Raycast(transform.position, dL, out rL);
-        Vector3 dR = (Quaternion.Euler(0, 0, collisionAngle / 2) * transform.right).normalized;
-        Physics.Raycast(transform.position, dR, out rR);
+        float fs = frontSensor.calculateSensorValue();
+        float ls = leftSensor.calculateSensorValue();
+        float rs = rightSensor.calculateSensorValue();
 
-        pintarRayo(rF);
-        dir += (Vector2)calcularFrontal(rF, rR, rL);
+        if (fs < 0 && ls < 0 && rs < 0)
+            dir += (Vector2)transform.right * -1;
 
-        pintarRayo(rR);
-        pintarRayo(rL);
-        dir += (Vector2)calcularLaterales(rR, rL);
-    }
-
-    Vector3 calcularFrontal(RaycastHit front, RaycastHit derecha, RaycastHit izquierda)
-    {
-        Vector3 d = Vector3.zero;
-        if (front.collider)
+        if(fs > Mathf.Max(ls, rs))
         {
-            //si vamos a colisionar con un obstaculo
-            //marcamos que hay peligro frontal para no tratar los posibles peligros laterales
-            if (!frontTick)
-                frontTick = true;
-
-            //tratamos la direccion en la que debe avanzar el agente para evitar la colision frontal
-            d = (Quaternion.Euler(0,0,collisionAngle) * (derecha.point - transform.position)).normalized;
-            if (derecha.distance < izquierda.distance)
-            {
-                d = Quaternion.Euler(0, 0, 180) * d;
-            }
-            else if (Mathf.Abs(derecha.distance - izquierda.distance) < 0.1)
-                d = Vector3.zero;
-            d -= (front.point - transform.position).normalized;
-            if (front.distance > warningRadius)
-                d *= 0;
-            else if (front.distance < warningRadius && front.distance > dangerRadius)
-                d *= warningRotStr;
-            else if (front.distance < dangerRadius)
-                d *= dangerRotStr;
-
+            dir += (Vector2)transform.right;
         }
-        return d;
-    }
-
-    Vector3 calcularLaterales(RaycastHit derecha, RaycastHit izquierda)
-    {
-        RaycastHit rMax;
-        Vector3 d = Vector3.zero;
-
-        //si hay peligro de colision frontal, decidimos evitar los peligros a los laterales
-        //tratamos la direccion en la que debe avanzar el agente para evitar las colisiones
-        if (!frontTick)
+        else if(ls > rs)
         {
-            d = (Quaternion.Euler(0, 0, collisionAngle) * (derecha.point - transform.position)).normalized;
-            if (derecha.distance < izquierda.distance)
-            {
-                rMax = derecha;
-                d = Quaternion.Euler(0, 0, 180) * d;
-            }
-            else
-            {
-                rMax = izquierda;
-            }
-
-            if (rMax.distance > warningRadius)
-                return Vector3.zero;
-            if (rMax.distance < warningRadius && rMax.distance > dangerRadius)
-            {
-                d *= warningRotStr;
-            }
-            else if (rMax.distance < dangerRadius)
-            {
-                d *= dangerRotStr;   // Reza a la Virgen
-            }
+            dir = leftForcePhSensor.normalized;
         }
-        return d;
-    }
-
-    void pintarRayo(RaycastHit r)
-    {
-        float distanciaSeg = r.distance < warningRadius ? r.distance : warningRadius;
-        float distanciaPan = r.distance < dangerRadius ? r.distance : dangerRadius;
-
-        Debug.DrawRay(transform.position, r.point - transform.position, Color.blue);
-        Debug.DrawRay(transform.position, (r.point - transform.position).normalized * distanciaSeg, Color.yellow);
-        Debug.DrawRay(transform.position, (r.point - transform.position).normalized * distanciaPan, Color.red);
+        // it may be all 0
+        else if(rs > ls)
+        {
+            dir = rightForcePhSensor.normalized;
+        }
+        else
+        {
+            Debug.Log("No pheromones detected");
+        }
     }
 
     public void setUpAnt(Transform phPool, Transform antHTr, AntHill antH)
@@ -259,5 +200,8 @@ public class Ant : MonoBehaviour
         pheromonePool = phPool;
         antHillTr = antHTr;
         antHill = antH;
+        //frontSensor.setObjectivePheromone();
+        //frontSensor.setObjectivePheromone();
+        //frontSensor.setObjectivePheromone();
     }
 }

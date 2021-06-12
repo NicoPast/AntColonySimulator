@@ -1033,29 +1033,13 @@ PrefabInstance:
     - target: {fileID: 6256344404727856938, guid: 4cabf31f31e154c4aa23f550d747cede,
         type: 3}
       propertyPath: food
-      value: 29
+      value: 50
       objectReference: {fileID: 0}
-    - target: {fileID: 6256344404727856938, guid: 4cabf31f31e154c4aa23f550d747cede,
-        type: 3}
-      propertyPath: antCost
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6256344404727856938, guid: 4cabf31f31e154c4aa23f550d747cede,
-        type: 3}
-      propertyPath: antPref
-      value: 
-      objectReference: {fileID: 987227055453408250, guid: 705964a8000771043b0d37ffa5bc2539,
-        type: 3}
     - target: {fileID: 6256344404727856938, guid: 4cabf31f31e154c4aa23f550d747cede,
         type: 3}
       propertyPath: antsPool
       value: 
       objectReference: {fileID: 461628696}
-    - target: {fileID: 6256344404727856938, guid: 4cabf31f31e154c4aa23f550d747cede,
-        type: 3}
-      propertyPath: spawnRadius
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 6256344404727856938, guid: 4cabf31f31e154c4aa23f550d747cede,
         type: 3}
       propertyPath: pheromonePool

@@ -119,3 +119,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d41e58cce9ff01488099270d7a72bdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  food: 5
+  antCost: 5
+  spawnRadius: 8
+  limitMaxAnts: 0
+  maxAnts: 100
+  antsPool: {fileID: 0}
+  pheromonePool: {fileID: 0}
+  antPref: {fileID: 987227055453408250, guid: 705964a8000771043b0d37ffa5bc2539, type: 3}
