@@ -16,6 +16,7 @@ public class Ant : MonoBehaviour
     public float wanderStr = 1;
 
     public float viewRadius = 10;
+    public float viewAngle = 60;
 
     // to make it follow your mouse
     //Vector3 target;
@@ -36,6 +37,8 @@ public class Ant : MonoBehaviour
     public GetFood getFood;
     public HandlePheromones handlePheromones;
 
+    bool turningAround = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +51,16 @@ public class Ant : MonoBehaviour
     {
         //target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //dir = ((Vector2)target - pos).normalized;
-        SetDirection();
+        if (turningAround)
+        {
+            dir = transform.right * -10;
+            Debug.DrawRay(transform.position, dir, Color.green);
+            turningAround = false;
+        }
+        else
+        {
+            SetDirection();
+        }
 
         Vector2 vel2 = dir * maxSpeed;
         Vector2 rot = (vel2 - vel) * rotSpeed;
@@ -72,9 +84,10 @@ public class Ant : MonoBehaviour
         else
         {
             dir = (dir + Random.insideUnitCircle * wanderStr).normalized;
-            //if (Vector2.Distance(transform.position, antHillTr.position) < viewRadius)
-                dir += (dir + ((Vector2)antHillTr.position - pos)).normalized;
-            dir += handlePheromones.detectPheromones() * 0.02f;
+            dir += handlePheromones.detectPheromones();
+            dir += ((Vector2)antHillTr.position - pos).normalized * 0.5f;
+            if (Vector2.Distance(transform.position, antHillTr.position) < viewRadius && Vector2.Angle(transform.right, antHillTr.position - transform.position) < viewAngle / 2)
+                dir = ((Vector2)antHillTr.position - pos).normalized;
 
 
             const float foodDropRadius = 0.5f;
@@ -112,7 +125,6 @@ public class Ant : MonoBehaviour
                 Destroy(targFood.gameObject);
                 changeState(AntState.WithFood);
                 targFood = null;
-                transform.Rotate(0,0,180);
             }
         }
     }
@@ -135,6 +147,7 @@ public class Ant : MonoBehaviour
                 Debug.LogError("Ant changed to unknown state!");
             break;
         }
+        turningAround = true;
     }
 
     public void setUpAnt(Transform phPool, Transform antHTr, AntHill antH)

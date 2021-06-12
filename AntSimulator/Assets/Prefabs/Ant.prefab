@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324842165228990829}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalPosition: {x: 0.5, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 987227055453408247}
@@ -175,10 +175,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 228ce2bd50228904397cbee7beea3479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 3
+  maxSpeed: 2
   rotSpeed: 1
   wanderStr: 0.3
   viewRadius: 20
+  viewAngle: 60
   antHill: {fileID: 0}
   antHillTr: {fileID: 0}
   collisionDetector: {fileID: 6883113873652448278}
@@ -230,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b233322541d76b04bb44e83dcbe973e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pheromoneSpawnRate: 0.5
+  pheromoneSpawnRate: 0.6
   pheromoneStr: 20
   pheromone: {fileID: 5331745331491770734, guid: e4fa6c5033eddd240b75cd4d1c16e4b0,
     type: 3}
@@ -275,7 +276,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1464352017887423726}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0.5, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 987227055453408247}
