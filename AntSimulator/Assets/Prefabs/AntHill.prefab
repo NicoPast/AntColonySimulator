@@ -124,7 +124,7 @@ MonoBehaviour:
   numOfAnts: 0
   spawnRadius: 8
   limitMaxAnts: 0
-  maxAnts: 100
+  maxAnts: 50
   antsPool: {fileID: 0}
   pheromonePool: {fileID: 0}
   antPref: {fileID: 987227055453408250, guid: 705964a8000771043b0d37ffa5bc2539, type: 3}

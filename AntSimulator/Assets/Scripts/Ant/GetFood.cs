@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class GetFood : MonoBehaviour
 {
-    public LayerMask foodLayer;
-    public float viewAngle;
-    public float viewRadius;
+    // Layer Mask de la comida
+    [SerializeField]
+    LayerMask foodLayer;
+
+    // angulo de vision
+    [SerializeField]
+    float viewAngle;
+
+    // radio de vision
+    [SerializeField]
+    float viewRadius;
 
     private void OnDrawGizmosSelected()
     {
@@ -28,6 +36,7 @@ public class GetFood : MonoBehaviour
 
     }
 
+    // detecta si hay comida en su campo de vision
     public Transform getFood()
     {
         Transform targFood = null;
@@ -56,6 +65,7 @@ public class GetFood : MonoBehaviour
         return targFood;
     }
 
+    // configuramos el detector de comida
     public void setUp(float viewRad)
     {
         viewRadius = viewRad;

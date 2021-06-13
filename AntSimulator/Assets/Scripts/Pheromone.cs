@@ -11,28 +11,33 @@ public class Pheromone : MonoBehaviour
         Danger
     };
 
+    // espera a setUp para el ciclo de ejecucion
     bool active = false;
 
+    // tipo y fuerza de la pheromona
     PheromoneType type = PheromoneType.Idle;
-    public float strength = 0;
+    [SerializeField]
+    float strength = 0;
 
-    public LayerMask idleLM;
-    public LayerMask foodLM;
-    public LayerMask dangerLM;
+    // layerMasks de los distintos tipos de pheromona
+    [SerializeField]
+    LayerMask idleLM;
+    [SerializeField]
+    LayerMask foodLM;
+    [SerializeField]
+    LayerMask dangerLM;
 
+    // variables para el calcuo de la fuerza
     float maxStr;
     float creationTime = 0;
 
-    public bool destroyable = true;
+    // se actualizara en cada frame?
+    [SerializeField]
+    bool destroyable = true;
 
+    // datos para el renderizado
     MeshRenderer render;
-
     Color c;
-    
-    Pheromone(PheromoneType t, float str) {
-        type = t;
-        strength = str;
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +45,7 @@ public class Pheromone : MonoBehaviour
         render = transform.gameObject.GetComponent<MeshRenderer>();
     }
 
+    // normaliza la mascara a las potencias de 2
     void normalizeLayerMask(ref LayerMask l)
     {
         int layerNumber = -1;
@@ -61,6 +67,8 @@ public class Pheromone : MonoBehaviour
             Color col = c;
             col.a = (strength / maxStr) - 0.3f;
             render.material.color = col;
+
+            // si se ha evaporado por completo destruyete
             if(strength <= 0)
             {
                 GameManager.instance().addPheromonesMap(-1);
@@ -69,6 +77,7 @@ public class Pheromone : MonoBehaviour
         }
     }
 
+    // activa las pheromonas y les pone el valor adecuado
     public void activatePheromone(PheromoneType t, float str = 10)
     {
         type = t;

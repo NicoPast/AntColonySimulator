@@ -16,6 +16,7 @@ public class Spawner : MonoBehaviour
         
     }
 
+    // comprueba si el mouse esta encima del mapa y si clicas poder spawnear comida y lugares de peligro
     private void OnMouseOver()
     {
         if(Input.GetMouseButtonDown(0)){
@@ -25,8 +26,5 @@ public class Spawner : MonoBehaviour
         {
             GameManager.instance().spawnDanger();
         }
-    }
-    private void OnMouseDown()
-    {
     }
 }

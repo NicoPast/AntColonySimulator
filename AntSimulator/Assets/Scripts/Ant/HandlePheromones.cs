@@ -4,26 +4,48 @@ using UnityEngine;
 
 public class HandlePheromones : MonoBehaviour
 {
-    public float pheromoneSpawnRate;
+    // timer para dejar las pheromonas
+    [SerializeField]
+    float pheromoneSpawnRate;
     float timer = 0;
-    public float pheromoneStr;
 
-    public GameObject pheromone;
-    public Transform pheromonePool;
+    // fuerza de la feromona a spawnear
+    [SerializeField]
+    float pheromoneStr;
 
-    public Sensor frontSensor;
-    public Sensor leftSensor;
-    public Sensor rightSensor;
+    // prefab y transform padre de las feromonas
+    [SerializeField]
+    GameObject pheromone;
+    [SerializeField]
+    Transform pheromonePool;
 
-    public float influenceStr;
+    // sensores que detectan las feromonas
+    [SerializeField]
+    Sensor frontSensor;
+    [SerializeField]
+    Sensor leftSensor;
+    [SerializeField]
+    Sensor rightSensor;
 
-    public LayerMask idleLM;
-    public LayerMask foodLM;
-    public LayerMask dangerLM;
+    // fuerza con la que influyen las feromonas a la direccion 
+    [SerializeField]
+    float influenceStr;
 
-    public Vector2 leftForcePhSensor;
-    public Vector2 rightForcePhSensor;
+    // Pheromones Layer Mask
+    [SerializeField]
+    LayerMask idleLM;
+    [SerializeField]
+    LayerMask foodLM;
+    [SerializeField]
+    LayerMask dangerLM;
 
+    // Dirección de giro en función del sensor
+    [SerializeField]
+    Vector2 leftForcePhSensor;
+    [SerializeField]
+    Vector2 rightForcePhSensor;
+
+    // feromona que deja la hormiga
     Pheromone.PheromoneType type = Pheromone.PheromoneType.Idle;
 
     // Start is called before the first frame update
@@ -38,6 +60,7 @@ public class HandlePheromones : MonoBehaviour
         
     }
 
+    // deja un rastro de pheromonas cada spawnRate de tiempo
     public void LeavePheromones()
     {
         timer += Time.deltaTime;
@@ -50,6 +73,7 @@ public class HandlePheromones : MonoBehaviour
         }
     }
 
+    // Detecta las pheromonas con los escaners y se guia por el que mas influencia tenga
     public Vector2 detectPheromones()
     {
         Vector2 dir = Vector2.zero;
@@ -69,7 +93,7 @@ public class HandlePheromones : MonoBehaviour
             Debug.DrawRay(transform.position, transform.up, Color.red);
             dir = transform.up;
         }
-        // it may be all 0
+        // pueden ser todos 0
         else if (rs > ls)
         {
             Debug.DrawRay(transform.position, -1 * transform.up, Color.red);
@@ -79,6 +103,7 @@ public class HandlePheromones : MonoBehaviour
         return dir * influenceStr;
     }
 
+    // cambia las pheromonas que spawnea la hormiga
     public void changePheromoneSpawn(Pheromone.PheromoneType t)
     {
         type = t;
@@ -86,6 +111,7 @@ public class HandlePheromones : MonoBehaviour
         updateSensors(lm);
     }
 
+    // actualiza el objetivo de los escaners
     void updateSensors(LayerMask lm)
     {
         frontSensor.setObjectivePheromone(lm);
@@ -93,6 +119,7 @@ public class HandlePheromones : MonoBehaviour
         rightSensor.setObjectivePheromone(lm);
     }
 
+    // configuramos el detector de feromonas
     public void setUp(Transform phPool)
     {
         pheromonePool = phPool;

@@ -4,11 +4,22 @@ using UnityEngine;
 
 public class CollisionDetector : MonoBehaviour
 {
-    public float collisionAngle;
-    public float warningRadius;
-    public float dangerRadius;
-    public float warningRotStr;
-    public float dangerRotStr;
+    // angulo de los rayos
+    [SerializeField]
+    float collisionAngle;
+
+    // radio de la zona de atencion
+    [SerializeField]
+    float warningRadius;
+    // radio de la zona de peligro
+    [SerializeField]
+    float dangerRadius;
+
+    // fuerzas de rotacion de atencion y peligro
+    [SerializeField]
+    float warningRotStr;
+    [SerializeField]
+    float dangerRotStr;
 
     RaycastHit rF, rL, rR;
 
@@ -33,6 +44,7 @@ public class CollisionDetector : MonoBehaviour
         
     }
 
+    // devuelve el vector resultante para evitar la colision con las paredes
     public Vector2 checkCollision()
     {
         Vector2 dir = Vector2.zero;
@@ -48,6 +60,7 @@ public class CollisionDetector : MonoBehaviour
         return dir;
     }
 
+    // calcula le rayo frontal de deteccion de colisiones
     Vector2 calcularFrontal(RaycastHit front, RaycastHit derecha, RaycastHit izquierda)
     {
         Vector2 d = Vector2.zero;
@@ -78,6 +91,7 @@ public class CollisionDetector : MonoBehaviour
         return d;
     }
 
+    // calcula los rayos laterales de la deteccion de colisiones
     Vector2 calcularLaterales(RaycastHit derecha, RaycastHit izquierda)
     {
         RaycastHit rMax;
@@ -112,6 +126,7 @@ public class CollisionDetector : MonoBehaviour
         return d;
     }
 
+    // pinta el rayo en funcion de su colision
     void pintarRayo(RaycastHit r)
     {
         float distanciaSeg = r.distance < warningRadius ? r.distance : warningRadius;

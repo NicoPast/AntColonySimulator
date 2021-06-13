@@ -4,13 +4,24 @@ using UnityEngine;
 
 public class Sensor : MonoBehaviour
 {
-    public float radius;
+    // radio de deteccion
+    [SerializeField]
+    float radius;
+
+    //value of the sensor
     float value;
 
-    public LayerMask objPheromone;
-    public LayerMask dangerPheromone;
+    // layerMasks que usara el sensor
+    [SerializeField]
+    LayerMask objPheromone;
+    [SerializeField]
+    LayerMask dangerPheromone;
+    [SerializeField]
+    LayerMask dangerSpot;
 
-    public Ant ant;
+    // referencia a la hormiga padre
+    [SerializeField]
+    Ant ant;
 
     private void OnDrawGizmosSelected()
     {
@@ -29,15 +40,16 @@ public class Sensor : MonoBehaviour
 
     }
 
+    // calcula el valor del sensor
     public float calculateSensorValue()
     {
         value = 0;
 
+        // detecta las colisiones con un circulo en el radio y posicion del sensor
         Collider2D[] objPh = Physics2D.OverlapCircleAll(transform.position, radius, objPheromone);
-        Collider2D[] dangerPh = Physics2D.OverlapCircleAll(transform.position, radius, dangerPheromone);
+        Collider2D[] dangerPh = Physics2D.OverlapCircleAll(transform.position, radius, dangerPheromone | dangerSpot);
 
-        //Debug.Log(vision.Length);
-
+        // si encuentra algun objeto lo gestiona
         if (objPh.Length > 0)
         {
             foreach(Collider2D ph in objPh)
@@ -55,6 +67,7 @@ public class Sensor : MonoBehaviour
         return value;
     }
 
+    // cambia las pheromonas objetivo
     public void setObjectivePheromone(LayerMask obj)
     {
         objPheromone = obj;

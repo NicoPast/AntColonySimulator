@@ -50,6 +50,9 @@ MonoBehaviour:
   dangerPheromone:
     serializedVersion: 2
     m_Bits: 2048
+  dangerSpot:
+    serializedVersion: 2
+    m_Bits: 4096
   ant: {fileID: 987227055453408251}
 --- !u!1 &987227055453408250
 GameObject:
@@ -182,7 +185,7 @@ MonoBehaviour:
   wanderStr: 0.4
   viewRadius: 20
   viewAngle: 60
-  state: 0
+  state: 3
   antHill: {fileID: 0}
   antHillTr: {fileID: 0}
   collisionDetector: {fileID: 6883113873652448278}
@@ -326,6 +329,9 @@ MonoBehaviour:
   dangerPheromone:
     serializedVersion: 2
     m_Bits: 2048
+  dangerSpot:
+    serializedVersion: 2
+    m_Bits: 4096
   ant: {fileID: 987227055453408251}
 --- !u!1 &5627351325893236138
 GameObject:
@@ -377,4 +383,7 @@ MonoBehaviour:
   dangerPheromone:
     serializedVersion: 2
     m_Bits: 2048
+  dangerSpot:
+    serializedVersion: 2
+    m_Bits: 4096
   ant: {fileID: 987227055453408251}

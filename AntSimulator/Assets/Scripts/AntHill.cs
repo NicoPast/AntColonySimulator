@@ -4,20 +4,37 @@ using UnityEngine;
 
 public class AntHill : MonoBehaviour
 {
-    public float food = 0;
+    // food in the colony
+    [SerializeField]
+    float food = 0;
 
-    public float antCost = 0;
-    public uint numOfAnts;
+    // cantidad de comida para producir una hormiga
+    [SerializeField]
+    float antCost = 0;
 
-    public float spawnRadius = 0;
+    // numero de hormigas
+    [SerializeField]
+    uint numOfAnts;
 
-    public bool limitMaxAnts = false;
-    public int maxAnts = 100;
+    // radio de spawn alrededor del hormiguero
+    [SerializeField]
+    float spawnRadius = 0;
 
-    public Transform antsPool;
-    public Transform pheromonePool;
+    // tope superior de hormigas en pantalla
+    [SerializeField]
+    bool limitMaxAnts = false;
+    [SerializeField]
+    int maxAnts = 100;
+    
+    // transform padres de las hormigas y las feromonas
+    [SerializeField]
+    Transform antsPool;
+    [SerializeField]
+    Transform pheromonePool;
 
-    public GameObject antPref;
+    // prefab de la hormiga
+    [SerializeField]
+    GameObject antPref;
 
     private void OnDrawGizmosSelected()
     {
@@ -39,6 +56,7 @@ public class AntHill : MonoBehaviour
         spawnAnt();
     }
 
+    // spawnea una hormiga si las condiciones lo permite
     void spawnAnt()
     {
         if(food >= antCost)
@@ -51,25 +69,58 @@ public class AntHill : MonoBehaviour
         }
     }
 
+    // añade comida al hormiguero
     public void addFood(int num)
     {
         food += num;
         GameManager.instance().showFoodAntHill();
     }
 
+    // spawnea una hormiga independientemente de las condiciones
     public void spawnAntForced()
     {
         if (limitMaxAnts && numOfAnts >= maxAnts)
             return;
         Vector3 pos = transform.position + (Vector3)Random.insideUnitCircle * Random.Range(0, spawnRadius);
         GameObject ant = Instantiate(antPref, pos, Random.rotation, antsPool);
-        ant.GetComponent<Ant>().setUpAnt(pheromonePool, transform, this);
+        ant.GetComponent<Ant>().setUpAnt(pheromonePool, this);
         numOfAnts++;
         GameManager.instance().addAnt(1);
     }
 
+    // activa o desactiva el tope de hormigas maximo
     public void changeLimitAnts()
     {
         limitMaxAnts = !limitMaxAnts;
+    }
+
+    public int getMaxAnts()
+    {
+        return maxAnts;
+    }
+
+    public void setMaxAnts(int max)
+    {
+        maxAnts = max;
+    }
+
+    public float getFood()
+    {
+        return food;
+    }
+
+    public uint getAnts()
+    {
+        return numOfAnts;
+    }
+
+    public float getAntCost()
+    {
+        return antCost;
+    }
+
+    public void setAntCost(float cost)
+    {
+        antCost = cost;
     }
 }

@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class GetDangerSpots : MonoBehaviour
 {
-    public LayerMask DangerLayer;
-    public float viewAngle;
-    public float viewRadius;
+    // Layer Mask de los lugares de peligro
+    [SerializeField]
+    LayerMask DangerLayer;
+
+    // angulo de vision
+    [SerializeField]
+    float viewAngle;
+    
+    // radio de vision
+    [SerializeField]
+    float viewRadius;
 
     private void OnDrawGizmosSelected()
     {
@@ -28,6 +36,7 @@ public class GetDangerSpots : MonoBehaviour
 
     }
 
+    // detecta si hay un punto de peligro en su campo de vision
     public Transform getDangerSpot()
     {
         Transform targDangSpot = null;
@@ -41,18 +50,14 @@ public class GetDangerSpots : MonoBehaviour
 
             if (Vector2.Angle(transform.right, dirDang) < viewAngle / 2)
             {
-                //Debug.Log("test");
                 targDangSpot = dang;
-            }
-            else
-            {
-                //Debug.Log("No encontre nada");
             }
         }
 
         return targDangSpot;
     }
 
+    // configuramos el detector
     public void setUp(float viewRad)
     {
         viewRadius = viewRad;

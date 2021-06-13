@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6256344404727856937}
   - component: {fileID: 6256344404727856936}
   - component: {fileID: 6986575217614941863}
+  - component: {fileID: 499453142}
+  - component: {fileID: 499453141}
   m_Layer: 12
   m_Name: DangerSpot
   m_TagString: Untagged
@@ -106,3 +108,42 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &499453142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6256344404727856941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cfad80ec9ed19c47b13a0e8d2e67490, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strength: 30
+  dangerSpot:
+    serializedVersion: 2
+    m_Bits: 4096
+--- !u!114 &499453141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6256344404727856941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d98fb7bb4aeb3449e10535c0ed5dcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strength: 30
+  idleLM:
+    serializedVersion: 2
+    m_Bits: 512
+  foodLM:
+    serializedVersion: 2
+    m_Bits: 1024
+  dangerLM:
+    serializedVersion: 2
+    m_Bits: 2048
+  destroyable: 0

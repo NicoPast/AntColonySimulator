@@ -8,29 +8,63 @@ public class GameManager : MonoBehaviour
 {
     static private GameManager _instance;
 
-    public Text antsText;
-    public Text foodText;
-    public Text antHillFoodText;
-    public Text dangerText;
-    public Text pheromoneText;
+    // textos de la izquierda
+    [SerializeField]
+    Text antsText;
+    [SerializeField]
+    Text foodText;
+    [SerializeField]
+    Text antHillFoodText;
+    [SerializeField]
+    Text dangerText;
+    [SerializeField]
+    Text pheromoneText;
 
-    public Text antCostText;
-    public Slider antCostSlid;
-    public Text antMaxText;
-    public Slider antMaxSlid;
+    // textos de la derecha
+    [SerializeField]
+    Text antsIdleText;
+    [SerializeField]
+    Text antsFoodText;
+    [SerializeField]
+    Text antsDangerText;
 
-    uint numAnts;
+    // Sliders de la UI
+    [SerializeField]
+    Text antCostText;
+    [SerializeField]
+    Slider antCostSlid;
+    [SerializeField]
+    Text antMaxText;
+    [SerializeField]
+    Slider antMaxSlid;
+
+    //datos para mostrar en pantalla
+    int numAnts;
     int numFood;
     int numDanger;
     int numPheromones;
 
-    public GameObject foodPref;
-    public GameObject dangerPref;
+    int numAntsIdle = 0;
+    int numAntsFood = 0;
+    int numAntsDanger = 0;
 
-    public AntHill antHill;
-    public Transform foodPool;
-    public Transform dangerPool;
-    public Transform pheromonePool;
+    // prefabs de comida y peligro
+    [SerializeField]
+    GameObject foodPref;
+    [SerializeField]
+    GameObject dangerPref;
+
+    // el hormiguero 
+    [SerializeField]
+    AntHill antHill;
+
+    // las pool de la escena
+    [SerializeField]
+    Transform foodPool;
+    [SerializeField]
+    Transform dangerPool;
+    [SerializeField]
+    Transform pheromonePool;
 
     static public GameManager instance()
     {
@@ -48,16 +82,19 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // setea los textos y las variables al dato correspondiente
         numFood = foodPool.childCount;
         numDanger = dangerPool.childCount;
-        numAnts = antHill.numOfAnts;
+        numAnts = (int)antHill.getAnts();
         numPheromones = pheromonePool.childCount;
         antsText.text = "Number of Ants: " + numAnts;
         foodText.text = "Food on Map: " + numFood;
         dangerText.text = "Danger on Map: " + numDanger;
         pheromoneText.text = "Pheromones on Map: " + numPheromones;
 
-        //Input.GetMouseButtonDown(0).
+        antsIdleText.text = numAntsIdle + ": Idle Ants";
+        antsFoodText.text = numAntsFood + ": Food Ants";
+        antsDangerText.text = numAntsDanger + ": Danger Ants";
     }
 
     // Update is called once per frame
@@ -66,22 +103,54 @@ public class GameManager : MonoBehaviour
 
     }
 
+    // añade los listeners al slider para conseguir sus valores
     private void OnEnable()
     {
         antCostSlid.onValueChanged.AddListener(delegate { updateAntCost(); });
         antMaxSlid.onValueChanged.AddListener(delegate { updateAntMax(); });
     }
 
+    // elimina los listener de los sliders
     private void OnDisable()
     {
         antCostSlid.onValueChanged.RemoveListener(delegate { updateAntCost(); });
         antMaxSlid.onValueChanged.RemoveListener(delegate { updateAntMax(); });
     }
 
-    public void addAnt(uint ants)
+    // -----------------------------------------------------------------
+    // Actualiza las variables de los textos en funcion de la simulacion
+    // -----------------------------------------------------------------
+
+    public void addAnt(int ants)
     {
         numAnts += ants;
+        if (numAnts < 0)
+            numAnts = 0;
         antsText.text = "Number of Ants: " + numAnts;
+    }
+
+    public void addIdleAnt(int ants)
+    {
+        numAntsIdle += ants;
+        if (numAntsIdle < 0)
+            numAntsIdle = 0;
+        antsIdleText.text = numAntsIdle + ": Idle Ants";
+    }
+
+    public void addFoodAnt(int ants)
+    {
+        numAntsFood += ants;
+        if (numAntsFood < 0)
+            numAntsFood = 0;
+        antsFoodText.text = numAntsFood + ": Food Ants";
+    }
+
+    public void addDangerAnt(int ants)
+    {
+        numAntsDanger += ants;
+        if (numAntsDanger < 0)
+            numAntsDanger = 0;
+        antsDangerText.text = numAntsDanger + ": Danger Ants";
     }
 
     public void addFoodMap(int foods)
@@ -110,31 +179,38 @@ public class GameManager : MonoBehaviour
 
     public void showFoodAntHill()
     {
-        antHillFoodText.text = "Food on AntHill: " + antHill.food;
+        antHillFoodText.text = "Food on AntHill: " + antHill.getFood();
     }
 
     public void updateAntCost()
     {
-        antHill.antCost = antCostSlid.value;
+        antHill.setAntCost(antCostSlid.value);
         antCostText.text = "Ant Cost: " + antCostSlid.value;
     }
 
     public void updateAntMax()
     {
-        antHill.maxAnts = (int)antMaxSlid.value;
+        antHill.setMaxAnts((int)antMaxSlid.value);
         antMaxText.text = "Max ants: " + (int)antMaxSlid.value;
     }
 
+    // -----------------------------------------------------------------
+    // FIN
+    // -----------------------------------------------------------------
+
+    // resetea la escena
     public void resetScene()
     {
         SceneManager.LoadScene(0);
     }
 
+    // apaga la app cuando es una build
     public void turnOff()
     {
         Application.Quit();
     }
 
+    // spawnea comida en funcion de la posicion del mouse
     public void spawnFood()
     {
         Vector2 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -144,6 +220,7 @@ public class GameManager : MonoBehaviour
         addFoodMap(1);
     }
 
+    // spawnea un punto de peligro en funcion de la posicion del mouse
     public void spawnDanger()
     {
         Vector2 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
