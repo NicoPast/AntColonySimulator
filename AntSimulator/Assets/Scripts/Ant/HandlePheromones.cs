@@ -82,7 +82,6 @@ public class HandlePheromones : MonoBehaviour
     {
         type = t;
         LayerMask lm = (t == Pheromone.PheromoneType.Idle) ? foodLM : idleLM;
-        Debug.Log(lm.value);
         updateSensors(lm);
     }
 

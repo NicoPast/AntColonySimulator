@@ -10,6 +10,8 @@ public class Sensor : MonoBehaviour
     public LayerMask objPheromone;
     public LayerMask dangerPheromone;
 
+    public Ant ant;
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(transform.position, radius);

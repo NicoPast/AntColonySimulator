@@ -37,6 +37,7 @@ public class Ant : MonoBehaviour
     public CollisionDetector collisionDetector;
     public GetFood getFood;
     public HandlePheromones handlePheromones;
+    public GetDangerSpots getDangSpot;
 
     public bool turningAround = false;
 
@@ -65,6 +66,10 @@ public class Ant : MonoBehaviour
         //target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //dir = ((Vector2)target - pos).normalized;
 
+        if (getDangSpot.getDangerSpot() != null)
+        {
+            changeState(AntState.Danger);
+        }
         // para evitar remolinos
         if (state == AntState.Danger)
             timerDan += Time.deltaTime;
@@ -176,8 +181,10 @@ public class Ant : MonoBehaviour
         }
     }
 
-    void changeState(AntState s)
+    public void changeState(AntState s)
     {
+        if (state == s)
+            return;
         state = s;
         switch (s)
         {

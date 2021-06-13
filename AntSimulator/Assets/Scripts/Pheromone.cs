@@ -23,6 +23,8 @@ public class Pheromone : MonoBehaviour
     float maxStr;
     float creationTime = 0;
 
+    public bool destroyable = true;
+
     MeshRenderer render;
 
     Color c;
@@ -53,7 +55,7 @@ public class Pheromone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (active)
+        if (active && destroyable)
         {
             strength -= Time.deltaTime;
             Color col = c;
@@ -69,7 +71,6 @@ public class Pheromone : MonoBehaviour
     public void activatePheromone(PheromoneType t, float str = 10)
     {
         type = t;
-        Debug.Log(type);
         creationTime = Time.time;
         strength = str;
         maxStr = str;

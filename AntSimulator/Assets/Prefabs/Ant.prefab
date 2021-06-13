@@ -50,6 +50,7 @@ MonoBehaviour:
   dangerPheromone:
     serializedVersion: 2
     m_Bits: 2048
+  ant: {fileID: 987227055453408251}
 --- !u!1 &987227055453408250
 GameObject:
   m_ObjectHideFlags: 0
@@ -66,6 +67,7 @@ GameObject:
   - component: {fileID: 6883113873652448278}
   - component: {fileID: 3142716810418079286}
   - component: {fileID: 7025648968072738093}
+  - component: {fileID: 5617730115899216058}
   m_Layer: 0
   m_Name: Ant
   m_TagString: Untagged
@@ -186,6 +188,7 @@ MonoBehaviour:
   collisionDetector: {fileID: 6883113873652448278}
   getFood: {fileID: 3142716810418079286}
   handlePheromones: {fileID: 7025648968072738093}
+  getDangSpot: {fileID: 5617730115899216058}
   turningAround: 0
   lastPosDist: 2
   timeToUpdateLastPos: 10
@@ -256,6 +259,23 @@ MonoBehaviour:
     m_Bits: 2048
   leftForcePhSensor: {x: 0, y: 1}
   rightForcePhSensor: {x: 0, y: -1}
+--- !u!114 &5617730115899216058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 987227055453408250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a7a7b4f51088534f85ab1abe20c1249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DangerLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  viewAngle: 80
+  viewRadius: 10
 --- !u!1 &1464352017887423726
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,6 +326,7 @@ MonoBehaviour:
   dangerPheromone:
     serializedVersion: 2
     m_Bits: 2048
+  ant: {fileID: 987227055453408251}
 --- !u!1 &5627351325893236138
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,3 +377,4 @@ MonoBehaviour:
   dangerPheromone:
     serializedVersion: 2
     m_Bits: 2048
+  ant: {fileID: 987227055453408251}
