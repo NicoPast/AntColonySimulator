@@ -51,7 +51,8 @@ public class Ant : MonoBehaviour
     float timerDan;
     public float timeToBeInDanger;
 
-    const float foodDropRadius = 0.5f;
+    public const float foodDropRadius = 0.5f;
+    public const float foodPickUpRadius = 0.2f;
 
     // Start is called before the first frame update
     void Start()
@@ -169,12 +170,12 @@ public class Ant : MonoBehaviour
             //Debug.Log("Voy para mi comida");
             dir = (targFood.position - transform.position).normalized;
 
-            const float foodPickUpRadius = 0.5f;
             if (Vector2.Distance(targFood.position, transform.position) < foodPickUpRadius)
             {
                 // cambiar el estado de la hormiga
                 Destroy(targFood.gameObject);
                 changeState(AntState.WithFood);
+                GameManager.instance().addFoodMap(-1);
                 withFood = true;
                 targFood = null;
             }

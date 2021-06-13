@@ -30,7 +30,7 @@ public class AntHill : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        GameManager.instance().showFoodAntHill();
     }
 
     // Update is called once per frame
@@ -46,15 +46,30 @@ public class AntHill : MonoBehaviour
             if (limitMaxAnts && numOfAnts >= maxAnts)
                 return;
             food -= antCost;
-            Vector3 pos = transform.position + (Vector3)Random.insideUnitCircle * Random.Range(0, spawnRadius);
-            GameObject ant = Instantiate(antPref, pos, Random.rotation, antsPool);
-            ant.GetComponent<Ant>().setUpAnt(pheromonePool, transform, this);
-            numOfAnts++;
+            GameManager.instance().showFoodAntHill();
+            spawnAntForced();
         }
     }
 
     public void addFood(int num)
     {
         food += num;
+        GameManager.instance().showFoodAntHill();
+    }
+
+    public void spawnAntForced()
+    {
+        if (limitMaxAnts && numOfAnts >= maxAnts)
+            return;
+        Vector3 pos = transform.position + (Vector3)Random.insideUnitCircle * Random.Range(0, spawnRadius);
+        GameObject ant = Instantiate(antPref, pos, Random.rotation, antsPool);
+        ant.GetComponent<Ant>().setUpAnt(pheromonePool, transform, this);
+        numOfAnts++;
+        GameManager.instance().addAnt(1);
+    }
+
+    public void changeLimitAnts()
+    {
+        limitMaxAnts = !limitMaxAnts;
     }
 }

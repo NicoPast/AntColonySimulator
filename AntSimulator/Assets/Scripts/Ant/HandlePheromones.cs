@@ -46,6 +46,7 @@ public class HandlePheromones : MonoBehaviour
             timer = 0;
             GameObject ph = Instantiate(pheromone, transform.position, transform.rotation, pheromonePool);
             ph.GetComponent<Pheromone>().activatePheromone(type, pheromoneStr);
+            GameManager.instance().addPheromonesMap(1);
         }
     }
 

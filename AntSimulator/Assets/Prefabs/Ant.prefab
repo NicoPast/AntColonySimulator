@@ -179,7 +179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 2
   rotSpeed: 1
-  wanderStr: 0.3
+  wanderStr: 0.4
   viewRadius: 20
   viewAngle: 60
   state: 0
@@ -247,7 +247,7 @@ MonoBehaviour:
   frontSensor: {fileID: 4943369659040869988}
   leftSensor: {fileID: 3617861433627140433}
   rightSensor: {fileID: 6901585317268757933}
-  influenceStr: 10
+  influenceStr: 5
   idleLM:
     serializedVersion: 2
     m_Bits: 512

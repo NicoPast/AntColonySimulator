@@ -63,6 +63,7 @@ public class Pheromone : MonoBehaviour
             render.material.color = col;
             if(strength <= 0)
             {
+                GameManager.instance().addPheromonesMap(-1);
                 Destroy(transform.gameObject);
             }
         }
