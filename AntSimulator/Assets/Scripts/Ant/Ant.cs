@@ -1,28 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Jobs;
-
-public struct AntUpdateJob : IJobParallelFor
-{
-    public void Execute(int index)
-    {
-
-    }
-}
-
-public class AntManager : MonoBehaviour
-{
-    [SerializeField]
-    List<Ant> ants;
-
-    private void Update()
-    {
-        var job = new AntUpdateJob();
-        var jobHandle = job.Schedule(ants.Count, 1);
-        jobHandle.Complete();
-    }
-}
 
 public class Ant : MonoBehaviour
 {
@@ -83,7 +61,7 @@ public class Ant : MonoBehaviour
         float foodDropRadius; //= 0.5f;
         float foodPickUpRadius; //= 0.2f;
 
-        public Data(Ant ant)
+        public Data(Ant ant, Transform antPool, AntHill antH)
         {
             transform = ant.transform;
 
@@ -127,6 +105,8 @@ public class Ant : MonoBehaviour
             foodPickUpRadius = ant.foodPickUpRadius;
 
             changeState(AntState.Idle);
+
+            setUpAnt(antPool, antH);
         }
 
         public void changeState(AntState s)
@@ -309,6 +289,13 @@ public class Ant : MonoBehaviour
                     targFood = null;
                 }
             }
+        }
+
+        // configuramos la hormiga
+        public void setUpAnt(Transform phPool, AntHill antH)
+        {
+            handlePheromones.setUp(phPool);
+            antHill = antH;
         }
     }
 
