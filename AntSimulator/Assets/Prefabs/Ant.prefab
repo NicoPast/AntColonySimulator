@@ -187,15 +187,15 @@ MonoBehaviour:
   viewAngle: 60
   state: 3
   antHill: {fileID: 0}
-  antHillTr: {fileID: 0}
   collisionDetector: {fileID: 6883113873652448278}
   getFood: {fileID: 3142716810418079286}
   handlePheromones: {fileID: 7025648968072738093}
   getDangSpot: {fileID: 5617730115899216058}
-  turningAround: 0
   lastPosDist: 2
   timeToUpdateLastPos: 10
   timeToBeInDanger: 10
+  foodDropRadius: 0.5
+  foodPickUpRadius: 0.2
 --- !u!114 &6883113873652448278
 MonoBehaviour:
   m_ObjectHideFlags: 0
