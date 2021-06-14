@@ -1,5 +1,7 @@
 # AntColonySimulator
 
+Realizado por: Nicolás Pastore Burgos
+
 # Descripción del proyecto
 
 Este proyecto demuestra el funcionamiento de una colonia de hormigas muy simplificadamente. Comenzará con unas pocas hormigas que buscarán comida por un mapa de manera aleatoria partiendo desde su hormiguero. De ahí, siguiendo un modelo que asemeja la realidad, estas irán dejando un rastro de feromonas para poder regresar al hormiguero, o guiar a otras hormigas a encontrar la comida que han encontrado. A medida que estas hormigas vayan consiguiendo introducir comida en el hormiguero, más hormigas podrán ir naciendo. Además si encuentran peligros, dejarán unas feromonas que hará que el resto de hormigas eviten ese lugar. Al encontrar esta comida, intentaran volver a su hormiguero a depositar lo encontrado y permitir que más hormigas nazcan.
