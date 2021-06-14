@@ -14,10 +14,6 @@ public class AntManager : MonoBehaviour
 
     private void Update()
     {
-        //for(var i = 0; i < transform.childCount; i++)
-        //{
-        //    ants.Add(transform.GetChild(i).GetComponent<Ant>());
-        //}
         var antDataArray = new NativeArray<Ant.Data>(ants.Count, Allocator.TempJob);
         for (var i = 0; i < ants.Count; i++)
         {
