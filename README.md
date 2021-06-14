@@ -88,6 +88,8 @@ Las pruebas realizadas para el estudio del funcionamiento de este proyecto fuero
 - Con un mapa con obstáculos, las hormigas son capaces de encontrar un camino esquivando los obstáculos, con la única dificultad de que si el camino es muy largo, se necesitan muchas hormigas para poder conseguir un comportamiento esperado, o feromonas que duren más tiempo. Cualquier de las dos soluciones suele requerir de un PC más potente.
 - Si las hormigas no son capaces de encontrar comida, acabarán rellenando el mapa con patrones caóticos bastante estéticos a mi parecer.
 - En el caso de colocar una comida en una posición imposible, las hormigas intentarán alcanzarla entrando en un bucle de intento, estado de alerta y de vuelta intentar alcanzar la comida. Si pasa el suficiente tiempo, todas las hormigas intentarán alcanzar esta comida bloqueada.
+- Si se colocan puntos de peligro en carreteras de comida, las hormigas dejarán de tomar ese camino por completo, muchas veces dificultando gravemente el acceso a la comida que habían encontrado. Es un comportamiento esperado.
+- Si se rodea el hormiguero de puntos de peligro, las hormigas serán incapaces de salir de un radio cercano a este, salvo unas pocas intrépidas que acabarán lanzándose a explorar.
 
 # Bibliografía y recursos utilizados
 
